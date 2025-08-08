@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "module": "nodenext",
+    "target": "esnext",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+  },
+  "include": ["src/**/*.ts", "@types"],
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts", "__tests__"]
+}
