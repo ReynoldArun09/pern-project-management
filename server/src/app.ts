@@ -3,6 +3,10 @@ import cors from "cors";
 import helmet from "helmet";
 import cookieSession from "cookie-session";
 import { parsedEnvVariables } from "./config/appConfig";
+import { authRoutes } from "./routes/authRoutes";
+import passport from "passport";
+
+import "./config/passport";
 
 const app = express();
 
@@ -20,5 +24,10 @@ app.use(
     sameSite: "lax",
   }),
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use("/api/v1/auth", authRoutes);
 
 export default app;

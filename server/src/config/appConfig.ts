@@ -16,8 +16,16 @@ const serverSchema = z.object({
     .min(1, { message: validationErrorMessages.CORS_ORIGIN }),
 });
 
+const googleSchema = z.object({
+  GOOGLE_CLIENT_ID: z.string().min(1),
+  GOOGLE_CALLBACK_URL: z.string().min(1),
+  GOOGLE_FRONTEND_URL: z.string().min(1),
+  GOOGLE_CLIENT_SECRET: z.string().min(1),
+});
+
 const envVariables = z.object({
   ...serverSchema.shape,
+  ...googleSchema.shape,
 });
 
 type envVariablesType = z.infer<typeof envVariables>;

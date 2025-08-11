@@ -9,22 +9,23 @@ datasource db {
 }
 
 model User {
-  id             String     @id @default(cuid())
-  name           String
-  email          String     @unique
-  password       String
-  profilePicture String?
-  isActive       Boolean    @default(true)
-  lastLogin      DateTime?
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
-  Workspace      Workspace? @relation(fields: [workspaceId], references: [id])
-  workspaceId    String?
-  Project        Project[]
-  TaskCreated    Task[]     @relation("TaskCreatedBy")
-  TaskAssigned   Task[]     @relation("TaskAssignedTo")
-  Member         Member[]
-  Account        Account[]
+  id                 String     @id @default(cuid())
+  name               String
+  email              String     @unique
+  password           String?
+  profilePicture     String?
+  isActive           Boolean    @default(true)
+  lastLogin          DateTime?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  CurrentWorkspace   Workspace? @relation(fields: [currentWorkspaceId], references: [id])
+  currentWorkspaceId String?
+  Project            Project[]
+  TaskCreated        Task[]     @relation("TaskCreatedBy")
+  TaskAssigned       Task[]     @relation("TaskAssignedTo")
+  Member             Member[]
+  Account            Account[]
+  Workspace          Workspace? @relation("UserWorkspace")
 }
 
 model Account {
@@ -44,10 +45,12 @@ model Workspace {
   inviteCode  String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  User        User[]
   Project     Project[]
   Task        Task[]
   Member      Member[]
+  Owner       User      @relation("UserWorkspace", fields: [ownerId], references: [id])
+  ownerId     String    @unique
+  User        User[]
 }
 
 model Project {
@@ -85,16 +88,16 @@ model Task {
 }
 
 model Member {
-  id          String    @id @default(cuid())
-  User        User      @relation(fields: [userId], references: [id])
-  userId      String
-  Workspace   Workspace @relation(fields: [workspaceId], references: [id])
-  workspaceId String
-  Role        Role      @relation(fields: [roleId], references: [id])
-  roleId      String
-  joinedAt    DateTime  @default(now())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id          String     @id @default(cuid())
+  User        User?      @relation(fields: [userId], references: [id])
+  userId      String?
+  Workspace   Workspace? @relation(fields: [workspaceId], references: [id])
+  workspaceId String?
+  Role        Role?      @relation(fields: [roleId], references: [id])
+  roleId      String?
+  joinedAt    DateTime   @default(now())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model Role {
@@ -119,10 +122,20 @@ enum RoleTypeEnum {
 }
 
 enum PermissionTypeEnum {
-  READ
-  WRITE
-  DELETE
-  UPDATE
+  CREATE_WORKSPACE
+  DELETE_WORKSPACE
+  EDIT_WORKSPACE
+  MANAGE_WORKSPACE_SETTINGS
+  ADD_MEMBER
+  CHANGE_MEMBER_ROLE
+  REMOVE_MEMBER
+  CREATE_PROJECT
+  EDIT_PROJECT
+  DELETE_PROJECT
+  CREATE_TASK
+  EDIT_TASK
+  DELETE_TASK
+  VIEW_ONLY
 }
 
 enum TaskStatusEnum {
