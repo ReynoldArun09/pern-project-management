@@ -8,6 +8,7 @@ import {
   verifyUserService,
 } from "../services/authService";
 import { NotFoundException } from "../utils/customError";
+import { prisma } from "../lib/prisma";
 
 passport.use(
   new GoogleStrategy(
@@ -31,7 +32,12 @@ passport.use(
           picture,
           email,
         });
-        done(null, user);
+        done(null, {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          workspaceId: user.currentWorkspaceId || "",
+        });
       } catch (error) {
         done(error, false);
       }
@@ -49,7 +55,12 @@ passport.use(
     async (email, password, done) => {
       try {
         const user = await verifyUserService({ email, password });
-        done(null, user);
+        done(null, {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          workspaceId: user.currentWorkspaceId || "",
+        });
       } catch (error: any) {
         done(error, false, { message: error?.message });
       }
@@ -57,5 +68,27 @@ passport.use(
   ),
 );
 
-passport.serializeUser((user: any, done) => done(null, user));
-passport.deserializeUser((user: any, done) => done(null, user));
+passport.serializeUser((user: Express.User, done) => done(null, user.id));
+passport.deserializeUser(async (id: string, done) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        currentWorkspaceId: true,
+      },
+    });
+
+    if (!user) return done(null, false);
+    done(null, {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      workspaceId: user.currentWorkspaceId || "",
+    });
+  } catch (error) {
+    done(error, null);
+  }
+});

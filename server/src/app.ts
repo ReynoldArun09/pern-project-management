@@ -1,12 +1,12 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import cookieSession from "express-session";
+import session from "express-session";
 import passport from "passport";
 
 import "./config/passport";
 import { parsedEnvVariables } from "./config/appConfig";
-import { authRoutes } from "./routes";
+import { authRoutes, userRoutes } from "./routes";
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
-  cookieSession({
+  session({
     secret: [parsedEnvVariables.SESSION_SECRET],
     resave: false,
     saveUninitialized: false,
@@ -37,5 +37,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/user", userRoutes);
 
 export default app;

@@ -15,7 +15,7 @@ import { registerSchema } from "../validations";
 
 export const googleLoginCallBack = asyncHandler(
   async (req: Request, res: Response) => {
-    const currentWorkspace = req.ctx.workspaceId;
+    const currentWorkspace = req.user?.workspaceId;
 
     if (!currentWorkspace) {
       return res.redirect(

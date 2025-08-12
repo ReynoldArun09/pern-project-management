@@ -1,14 +1,12 @@
 declare global {
   namespace Express {
-    interface Request {
-      ctx: userPayloadType;
-    }
+    interface User extends userPayloadType {}
   }
 }
 
-export type userPayloadType = {
+export interface userPayloadType {
   id: string;
   name: string;
   workspaceId: string;
   email: string;
-};
+}
