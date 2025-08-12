@@ -51,7 +51,7 @@ export const joinWorkspaceByInviteService = async (
   return { workspaceId: existingWorkspace.id, role: existingRole.name };
 };
 
-export const getMemeberRoleInWorkspace = async (
+export const getMemberRoleInWorkspace = async (
   userId: string,
   workspaceId: string,
 ) => {
