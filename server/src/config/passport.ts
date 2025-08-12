@@ -48,7 +48,7 @@ passport.use(
     },
     async (email, password, done) => {
       try {
-        const { user } = await verifyUserService({ email, password });
+        const user = await verifyUserService({ email, password });
         done(null, user);
       } catch (error: any) {
         done(error, false, { message: error?.message });
