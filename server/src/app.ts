@@ -6,7 +6,7 @@ import passport from "passport";
 
 import "./config/passport";
 import { parsedEnvVariables } from "./config/appConfig";
-import { authRoutes, userRoutes } from "./routes";
+import { authRoutes, memberRoutes, userRoutes } from "./routes";
 
 const app = express();
 
@@ -38,5 +38,6 @@ app.use(passport.session());
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/member", memberRoutes);
 
 export default app;
