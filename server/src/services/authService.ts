@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
-import { NotFoundException } from "../utils/customError";
+import { BadRequestException, NotFoundException } from "../utils";
+import { registerSchemaType } from "../validations";
 import bcrypt from "bcrypt";
-import { registerSchemaType } from "../validations/authSchema";
 
 type AccountDetails = {
   provider: "GOOGLE" | "EMAIL";
@@ -127,6 +127,14 @@ export const verifyUserService = async ({
     throw new NotFoundException("User not found for the given account");
   }
 
+  if (user.password) {
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      throw new BadRequestException("Invalid credentinals.");
+    }
+  }
+
   return user;
 };
 
@@ -143,14 +151,16 @@ export const registerUserService = async ({
     });
 
     if (existingUser) {
-      //throw error
+      throw new BadRequestException("User already exist with this email");
     }
+
+    const hashPassword = await bcrypt.hash(password, 10);
 
     const user = await tx.user.create({
       data: {
         email,
         name,
-        password,
+        password: hashPassword,
       },
     });
 

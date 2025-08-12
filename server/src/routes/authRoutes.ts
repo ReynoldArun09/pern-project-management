@@ -5,6 +5,7 @@ import {
   googleLoginCallBack,
   loginController,
   logoutController,
+  registerUserController,
 } from "../controllers/authController";
 
 export const authRoutes = Router();
@@ -12,6 +13,7 @@ const failedUrl = `${parsedEnvVariables.GOOGLE_FRONTEND_URL}?status=failure`;
 
 authRoutes.post("/login", loginController);
 authRoutes.post("/logout", logoutController);
+authRoutes.post("/register", registerUserController);
 
 authRoutes.get(
   "/google",

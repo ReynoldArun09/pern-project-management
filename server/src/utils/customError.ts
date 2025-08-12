@@ -14,3 +14,20 @@ export class NotFoundException extends CustomError {
     super(message, httpStatusCode.NOT_FOUND);
   }
 }
+
+export class InternalServerException extends CustomError {
+  constructor(message = "Internal Server Error") {
+    super(message, httpStatusCode.INTERNAL_SERVER);
+  }
+}
+export class UnAuthorizedException extends CustomError {
+  constructor(message = "Unauthorized") {
+    super(message, httpStatusCode.UNAUTHORIZED);
+  }
+}
+
+export class BadRequestException extends CustomError {
+  constructor(message = "Bad Request") {
+    super(message, httpStatusCode.BAD_REQUEST);
+  }
+}
