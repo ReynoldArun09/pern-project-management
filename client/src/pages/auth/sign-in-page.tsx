@@ -2,20 +2,45 @@ import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardDescription, CardContent, CardTitle } from "@/components/ui/card"
 import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Loader } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import Logo from "@/components/common/logo"
 import GoogleOauthButton from "@/components/auth/google-oauth-button"
 import { Input } from "@/components/ui/input"
-
+import { signInSchema, type signInSchemaType } from "@/validations/auth.schema"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useLoginMutation } from "@/services/mutation"
+import { toast } from "sonner"
 
 export default function SignInPage() {
+    const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
+    const returnUrl = searchParams.get("returnUrl")
+    const form = useForm<signInSchemaType>({
+        resolver: zodResolver(signInSchema),
+        defaultValues: {
+            email: "",
+            password: ""
+        }
+    })
 
-    const form = useForm()
+    const { mutate, isPending } = useLoginMutation()
 
-    const onSubmit = () => { }
+    const onSubmit = (data: signInSchemaType) => {
+        if (isPending) return;
+        mutate(data, {
+            onSuccess: (data) => {
+                const user = data.data
+                const decodedUrl = returnUrl ? decodeURIComponent(returnUrl) : null;
+                navigate(decodedUrl || `/workspace/${user.workspaceId}`)
+            },
+            onError: (error) => {
+                toast.error(error.message)
+            }
+        })
+    }
 
-    const isPending = false
+
 
     return (
         <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">

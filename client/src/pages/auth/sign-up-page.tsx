@@ -3,31 +3,49 @@ import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardDescription, CardContent, CardTitle } from "@/components/ui/card"
 import { Form, FormField, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Loader } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import Logo from "@/components/common/logo"
 import GoogleOauthButton from "@/components/auth/google-oauth-button"
 import { Input } from "@/components/ui/input"
+import { signUpSchema, type signUpSchemaType } from "@/validations/auth.schema"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useRegisterMutation } from "@/services/mutation"
+import { toast } from "sonner"
 
 export default function SignUpPage() {
+    const navigate = useNavigate()
+    const form = useForm<signUpSchemaType>({
+        resolver: zodResolver(signUpSchema),
+        defaultValues: {
+            email: "",
+            name: "",
+            password: ""
+        }
+    })
 
-    const form = useForm()
+    const { mutate, isPending } = useRegisterMutation()
 
-
-    const onSubmit = () => { }
-
-    const isPending = false
-
+    const onSubmit = (data: signUpSchemaType) => {
+        if (isPending) return;
+        mutate(data, {
+            onSuccess: () => {
+                navigate("/")
+            },
+            onError: (error) => {
+                toast.error(error.message)
+            }
+        })
+    }
     return (
         <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
             <div className="flex w-full max-w-sm flex-col gap-6">
-                <Link
-                    to="/"
+                <div
                     className="flex items-center gap-2 self-center"
                 >
                     <Logo />
                     Team Sync.
-                </Link>
+                </div>
                 <div className="flex flex-col gap-6">
                     <Card>
                         <CardHeader className="text-center">
