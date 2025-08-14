@@ -3,6 +3,6 @@ import {
   passwordSchema,
   registerSchema,
   registerSchemaType,
-} from "./authSchema";
+} from './authSchema';
 
 export { emailSchema, passwordSchema, registerSchema, registerSchemaType };

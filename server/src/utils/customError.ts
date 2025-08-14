@@ -1,4 +1,4 @@
-import { httpStatusCode } from "../enums/httpStatusCode";
+import { httpStatusCode } from '../enums/httpStatusCode';
 
 export class CustomError extends Error {
   statusCode: httpStatusCode;
@@ -10,24 +10,24 @@ export class CustomError extends Error {
 }
 
 export class NotFoundException extends CustomError {
-  constructor(message = "Resource not found") {
+  constructor(message = 'Resource not found') {
     super(message, httpStatusCode.NOT_FOUND);
   }
 }
 
 export class InternalServerException extends CustomError {
-  constructor(message = "Internal Server Error") {
+  constructor(message = 'Internal Server Error') {
     super(message, httpStatusCode.INTERNAL_SERVER);
   }
 }
 export class UnAuthorizedException extends CustomError {
-  constructor(message = "Unauthorized") {
+  constructor(message = 'Unauthorized') {
     super(message, httpStatusCode.UNAUTHORIZED);
   }
 }
 
 export class BadRequestException extends CustomError {
-  constructor(message = "Bad Request") {
+  constructor(message = 'Bad Request') {
     super(message, httpStatusCode.BAD_REQUEST);
   }
 }

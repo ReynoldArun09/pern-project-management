@@ -1,17 +1,17 @@
-import { NextFunction, Request, Response } from "express";
-import { parsedEnvVariables } from "../config/appConfig";
-import passport from "passport";
+import { NextFunction, Request, Response } from 'express';
+import { parsedEnvVariables } from '../config/appConfig';
+import passport from 'passport';
 
-import { registerUserService } from "../services/authService";
+import { registerUserService } from '../services/authService';
 import {
   asyncHandler,
   InternalServerException,
   sendApiResponse,
   UnAuthorizedException,
-} from "../utils";
-import { httpStatusCode } from "../enums/httpStatusCode";
-import { apiSuccessMessages } from "../constants/apiResponseMessage";
-import { registerSchema } from "../validations";
+} from '../utils';
+import { httpStatusCode } from '../enums/httpStatusCode';
+import { apiSuccessMessages } from '../constants/apiResponseMessage';
+import { registerSchema } from '../validations';
 
 export const googleLoginCallBack = asyncHandler(
   async (req: Request, res: Response) => {
@@ -32,7 +32,7 @@ export const googleLoginCallBack = asyncHandler(
 export const loginController = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate(
-      "local",
+      'local',
       (
         err: Error | null,
         user: Express.User | false,
@@ -43,7 +43,7 @@ export const loginController = asyncHandler(
         }
 
         if (!user) {
-          throw new UnAuthorizedException("Invalid credentinals");
+          throw new UnAuthorizedException('Invalid credentinals');
         }
         req.logIn(user, (err) => {
           if (err) {
@@ -52,6 +52,7 @@ export const loginController = asyncHandler(
 
           sendApiResponse({
             res,
+            data: user,
             message: apiSuccessMessages.LOGIN_SUCCESS,
           });
         });

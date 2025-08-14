@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { asyncHandler, BadRequestException, sendApiResponse } from "../utils";
-import { joinWorkspaceByInviteService } from "../services/memberService";
-import { z } from "zod";
+import { Request, Response } from 'express';
+import { asyncHandler, BadRequestException, sendApiResponse } from '../utils';
+import { joinWorkspaceByInviteService } from '../services/memberService';
+import { z } from 'zod';
 
 export const joinWorkspaceController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -10,7 +10,7 @@ export const joinWorkspaceController = asyncHandler(
     const userId = req.user?.id;
 
     if (!userId) {
-      throw new BadRequestException("Invalid user Id");
+      throw new BadRequestException('Invalid user Id');
     }
 
     const { workspaceId, role } = await joinWorkspaceByInviteService(

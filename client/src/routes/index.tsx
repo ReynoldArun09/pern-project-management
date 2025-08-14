@@ -1,6 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { authenticationRoutePaths } from "./common/routes"
-import AuthRoute from "./auth.route"
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { authenticationRoutePaths } from './common/routes';
+import AuthRoute from './auth.route';
 
 export default function AppRoutes() {
   return (
@@ -13,5 +13,5 @@ export default function AppRoutes() {
         </Route>
       </Routes>
     </BrowserRouter>
-  )
+  );
 }

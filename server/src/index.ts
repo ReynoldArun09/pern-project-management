@@ -1,5 +1,5 @@
-import app from "./app";
-import { parsedEnvVariables } from "./config/appConfig";
+import app from './app';
+import { parsedEnvVariables } from './config/appConfig';
 
 const port = parsedEnvVariables.PORT;
 

@@ -1,14 +1,14 @@
-import passport from "passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Strategy as LocalStrategy } from "passport-local";
-import { parsedEnvVariables } from "./appConfig";
-import { Request } from "express";
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as LocalStrategy } from 'passport-local';
+import { parsedEnvVariables } from './appConfig';
+import { Request } from 'express';
 import {
   loginOrCreateAccountService,
   verifyUserService,
-} from "../services/authService";
-import { NotFoundException } from "../utils/customError";
-import { prisma } from "../lib/prisma";
+} from '../services/authService';
+import { NotFoundException } from '../utils/customError';
+import { prisma } from '../lib/prisma';
 
 passport.use(
   new GoogleStrategy(
@@ -17,16 +17,16 @@ passport.use(
       clientSecret: parsedEnvVariables.GOOGLE_CLIENT_SECRET,
       callbackURL: parsedEnvVariables.GOOGLE_CALLBACK_URL,
       passReqToCallback: true,
-      scope: ["profile", "email"],
+      scope: ['profile', 'email'],
     },
     async (req: Request, accessToken, refreshToken, profile, done) => {
       try {
         const { email, sub: googleId, picture } = profile._json;
         if (!googleId) {
-          throw new NotFoundException("Google Id is missing.");
+          throw new NotFoundException('Google Id is missing.');
         }
         const { user } = await loginOrCreateAccountService({
-          provider: "GOOGLE",
+          provider: 'GOOGLE',
           providerId: googleId,
           displayName: profile.displayName,
           picture,
@@ -36,7 +36,7 @@ passport.use(
           id: user.id,
           name: user.name,
           email: user.email,
-          workspaceId: user.currentWorkspaceId || "",
+          workspaceId: user.currentWorkspaceId || '',
         });
       } catch (error) {
         done(error, false);
@@ -48,8 +48,8 @@ passport.use(
 passport.use(
   new LocalStrategy(
     {
-      usernameField: "email",
-      passwordField: "password",
+      usernameField: 'email',
+      passwordField: 'password',
       session: true,
     },
     async (email, password, done) => {
@@ -59,7 +59,7 @@ passport.use(
           id: user.id,
           name: user.name,
           email: user.email,
-          workspaceId: user.currentWorkspaceId || "",
+          workspaceId: user.currentWorkspaceId || '',
         });
       } catch (error: any) {
         done(error, false, { message: error?.message });
@@ -86,7 +86,7 @@ passport.deserializeUser(async (id: string, done) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      workspaceId: user.currentWorkspaceId || "",
+      workspaceId: user.currentWorkspaceId || '',
     });
   } catch (error) {
     done(error, null);

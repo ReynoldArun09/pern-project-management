@@ -1,5 +1,5 @@
-import { Response } from "express";
-import { httpStatusCode } from "../enums/httpStatusCode";
+import { Response } from 'express';
+import { httpStatusCode } from '../enums/httpStatusCode';
 
 interface IApiResponse<T> {
   res: Response;

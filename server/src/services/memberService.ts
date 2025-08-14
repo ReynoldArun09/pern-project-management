@@ -1,9 +1,9 @@
-import { prisma } from "../lib/prisma";
+import { prisma } from '../lib/prisma';
 import {
   BadRequestException,
   NotFoundException,
   UnAuthorizedException,
-} from "../utils";
+} from '../utils';
 
 export const joinWorkspaceByInviteService = async (
   userId: string,
@@ -16,7 +16,7 @@ export const joinWorkspaceByInviteService = async (
   });
 
   if (!existingWorkspace) {
-    throw new NotFoundException("Workspace doesnt exist.");
+    throw new NotFoundException('Workspace doesnt exist.');
   }
 
   const existingMember = await prisma.member.findFirst({
@@ -27,17 +27,17 @@ export const joinWorkspaceByInviteService = async (
   });
 
   if (existingMember) {
-    throw new BadRequestException("You are already member.");
+    throw new BadRequestException('You are already member.');
   }
 
   const existingRole = await prisma.role.findUnique({
     where: {
-      name: "MEMBER",
+      name: 'MEMBER',
     },
   });
 
   if (!existingRole) {
-    throw new NotFoundException("Role not found");
+    throw new NotFoundException('Role not found');
   }
 
   await prisma.member.create({
@@ -62,7 +62,7 @@ export const getMemberRoleInWorkspace = async (
   });
 
   if (!existingWorkspace) {
-    throw new NotFoundException("Workspace not found.");
+    throw new NotFoundException('Workspace not found.');
   }
 
   const existingMember = await prisma.member.findFirst({
@@ -76,7 +76,7 @@ export const getMemberRoleInWorkspace = async (
   });
 
   if (!existingMember) {
-    throw new UnAuthorizedException("You are not member of this workspace");
+    throw new UnAuthorizedException('You are not member of this workspace');
   }
 
   const roleName = existingMember.Role?.name;

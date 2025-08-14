@@ -1,12 +1,12 @@
-import dotenv from "dotenv";
-import { z } from "zod";
-import { customLogger } from "../utils";
-import { validationErrorMessages } from "../constants/validationErrorMessages";
+import dotenv from 'dotenv';
+import { z } from 'zod';
+import { customLogger } from '../utils';
+import { validationErrorMessages } from '../constants/validationErrorMessages';
 
 dotenv.config();
 
 const serverSchema = z.object({
-  NODE_ENV: z.enum(["development", "production"]).default("development"),
+  NODE_ENV: z.enum(['development', 'production']).default('development'),
   PORT: z.coerce.number().default(3000),
   SESSION_SECRET: z
     .string()

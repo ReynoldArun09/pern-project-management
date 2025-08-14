@@ -1,5 +1,5 @@
-import { prisma } from "../lib/prisma";
-import { BadRequestException } from "../utils";
+import { prisma } from '../lib/prisma';
+import { BadRequestException } from '../utils';
 
 export const getCurrentUserService = async (userId: string) => {
   const existingUser = await prisma.user.findUnique({
@@ -9,7 +9,7 @@ export const getCurrentUserService = async (userId: string) => {
   });
 
   if (!existingUser) {
-    throw new BadRequestException("User not found.");
+    throw new BadRequestException('User not found.');
   }
 
   return { user: existingUser };

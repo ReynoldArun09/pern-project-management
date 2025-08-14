@@ -1,12 +1,12 @@
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import session from "express-session";
-import passport from "passport";
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import session from 'express-session';
+import passport from 'passport';
 
-import "./config/passport";
-import { parsedEnvVariables } from "./config/appConfig";
-import { authRoutes, memberRoutes, userRoutes } from "./routes";
+import './config/passport';
+import { parsedEnvVariables } from './config/appConfig';
+import { authRoutes, memberRoutes, userRoutes } from './routes';
 
 const app = express();
 
@@ -25,9 +25,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: parsedEnvVariables.NODE_ENV === "production",
+      secure: parsedEnvVariables.NODE_ENV === 'production',
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: 'lax',
       maxAge: 24 * 60 * 60 * 1000,
     },
   }),
@@ -36,8 +36,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/user", userRoutes);
-app.use("/api/v1/member", memberRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/member', memberRoutes);
 
 export default app;
